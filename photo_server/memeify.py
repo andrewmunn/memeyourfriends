@@ -18,8 +18,10 @@ def memeify(url, top, bot):
     except URLError, e:
         print "URL Error:",e.reason , url
 
-    drawText(img, top, True)
-    drawText(img, bot, False)
+    if top: 
+        drawText(img, top, True)
+    if bot:
+        drawText(img, bot, False)
     
     stringio = cStringIO.StringIO()
     img.save(stringio, "JPEG")

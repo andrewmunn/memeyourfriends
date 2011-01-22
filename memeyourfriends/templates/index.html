@@ -6,6 +6,7 @@
   <head>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script type="text/javascript" src="/static/javascripts/application.js"></script>
+    <script src="http://connect.facebook.net/en_US/all.js"></script>
     <link type="text/css" rel="stylesheet" href="/static/stylesheets/application.css" />
   </head>
   <body>
@@ -18,31 +19,35 @@
            length="long"
            size="large"
            onlogin="location.reload(true);"
-           perms="friends_photos,friends_photo_video_tags">
+           perms="user_photos,publish_stream">
 	</fb:login-button>
       </div>
     </div>
     <div id="create_step" class="step">
       <div class="header">Select a Photo and Caption</div>
       <div class="content">
-	<form action="/submit">
-	  <div class="clearfix">
-	    <div id="photo_container"></div>
-	    <div id="caption_entry">
-	      <div class="caption_box">
-		Line 1:
-		<input name="caption1" />
-	      </div>
-	      <div class="caption_box">
-		Line 2:
-		<input name="caption2" />
-	      </div>
-	      <div id="submit" class="caption_box">
-		<input type="submit" text="Generate Meme!" />
-	      </div>
-	    </div>
+	<div class="clearfix">
+	  <div id="photo_container">
+	    <div id="photo_prompt">Select a Photo</div>
+	    <input name="imgSrc" type="hidden" />
+	    <div id="photos"></div>
 	  </div>
-	</form>
+	  <div id="caption_entry">
+	    <div class="caption_box">
+	      Line 1:
+	      <input name="caption1" />
+	    </div>
+	    <div class="caption_box">
+	      Line 2:
+	      <input name="caption2" />
+	    </div>
+	    <div id="submit" class="caption_box">
+	      <input type="submit" value="Generate Meme!" />
+	    </div>
+
+	    <iframe id="meme_frame"></iframe>
+	  </div>
+	</div>
       </div>
     </div>
   </body>

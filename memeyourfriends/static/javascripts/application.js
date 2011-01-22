@@ -23,21 +23,29 @@ function _Application() {
 
     function loadAlbumPhotosComplete(response) {
 	$.each(response.data, function() {
-		var img, data;
+		var img, div, data;
 		data = this;
 		img = $("<img />");
 		img.attr("src", data.picture);
 		img.addClass("selectImg");
-		$("#photos").append(img);
+		//		img.cjObjectScaler({method:"fill"});
 		img.click(function() {
 			photoSelected(data.source);
 		    });
+		div = $("<div />");
+		div.append(img);
+		div.addClass("selectDiv");
+		$("#photos").append(div);
 	    });
     }
 
     function photoSelected(source) {
+	var img;
 	$("input[name='imgSrc']").val(source);
-	$("#photo_container").css("background-image", "url(" + source + ")");
+	img = $("<img />");
+	img.attr("src", source);
+	img.cjObjectScaler({method:"fill"});
+	$("#photo_display").html(img);
 	$("#photo_prompt").hide();
     }
 
@@ -61,7 +69,8 @@ function _Application() {
 		    cookie: true,
 		    xfbml: true});
 	FB.getLoginStatus(loadFBAPIComplete);
-	$("#photo_container").click(selectPhoto);
+	selectPhoto();
+	//	$("#photo_container").click(selectPhoto);
 	$("#submit").click(submit);
     }
     $(initApplication);

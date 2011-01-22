@@ -70,11 +70,23 @@ HTML, BODY {
 
 #photos {
     position:relative;
-    top:200px;
+    top:220px;
     overflow-y:auto;
     height:300px;    
 }
 
 .selectImg {
     cursor:pointer;
+}
+
+.selectDiv {
+    width:200px;
+    height:100px;
+}
+
+#photo_display {
+    position:absolute;
+    top:0;
+    width:200px;
+    height:200px;
 }

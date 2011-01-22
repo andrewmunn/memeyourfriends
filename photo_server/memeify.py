@@ -35,7 +35,7 @@ def memeify(url, top, bot):
 def drawText(img, text, top):
     width, height = img.size
 
-    font_size = get_font_size2(len(text), width, height)
+    font_size = get_font_size(len(text), width, height)
     font = ImageFont.truetype("impact.ttf", font_size)
     draw = ImageDraw.Draw(img)
 
@@ -55,14 +55,9 @@ def drawText(img, text, top):
         draw.text((x, y), line, (255,255,255), font=font)
 
 def get_font_size(length, width, height):
-    font_size = height / 4 - length * 2
-    if font_size < 12:
-        font_size = 12
-
-    return font_size
-
-def get_font_size2(length, width, height):
     font_size = 2 * int(math.sqrt( (.9 * width * height / 5) / (2 * length)))
+    if font_size > height / 5:
+        font_size = height / 5
     return font_size
 
 def wordwrap(s, font, width):

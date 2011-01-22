@@ -1,8 +1,8 @@
 /* Application Javascript */
 function _Application() {
-    var APP_ID = "6d1dda329a51cacc3bee5e0de958bb5d";
+    var APP_ID = "1c6f5e338c7989f098ad50f8c1224878";
     var MEME_GEN = "http://www.willhughes.ca:8080";
-    var LOCAL_MEME_GEN = "http://web1.tunnlr.com:11580/meme"
+    var LOCAL_MEME_GEN = "http://web1.tunnlr.com:11583/meme"
 
     function loadFBAPIComplete(response) {
 	if (response.session) {
@@ -31,7 +31,7 @@ function _Application() {
 		img.addClass("selectImg");
 		//		img.cjObjectScaler({method:"fill"});
 		img.click(function() {
-			photoSelected(data.source);
+			photoSelected(data.source, data.picture);
 		    });
 		div = $("<div />");
 		div.append(img);
@@ -40,12 +40,12 @@ function _Application() {
 	    });
     }
 
-    function photoSelected(source) {
+    function photoSelected(source, thumb) {
 	var img;
 	$("input[name='imgSrc']").val(source);
 	img = $("<img />");
-	img.attr("src", source);
-	img.cjObjectScaler({method:"fill"});
+	img.attr("src", thumb);
+	//	img.cjObjectScaler({method:"fill"});
 	$("#photo_display").html(img);
 	$("#photo_prompt").hide();
     }

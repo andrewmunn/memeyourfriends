@@ -11,8 +11,8 @@ import logging
 import utils
 import cStringIO as StringIO
 
-APP_KEY = "6d1dda329a51cacc3bee5e0de958bb5d"
-APP_SECRET = "6fe38fe9e6e4767ed570233f183ffa04"
+APP_KEY = "1c6f5e338c7989f098ad50f8c1224878"
+APP_SECRET = "7d6557c4b9ce6d061b7047041d6538b0"
 GRAPH_PHOTO_URL = "https://graph.facebook.com/me/photos"
 MEME_URL = "http://www.willhughes.ca:8080"
 
@@ -68,9 +68,14 @@ class MemeHandler(webapp.RequestHandler):
         params = {   
                     "access_token": access_token,
                      "message": msg,
-                  "source": StringIO.StringIO(meme_data.content, "rb")
+                  "source": StringIO.StringIO(meme_data.content)
                                    }
-        logging.info(opener.open(GRAPH_PHOTO_URL, params).read())
+        try:
+            opener.open(GRAPH_PHOTO_URL, params).read()
+        except urllib2.HTTPError, ex:
+            logging.info(ex.message)
+        logging.info
+
 
 def main():
     routes = [('/', MainHandler),

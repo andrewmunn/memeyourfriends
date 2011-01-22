@@ -5,7 +5,7 @@ import os
 from google.appengine.ext.webapp import template
 
 class MainHandler(webapp.RequestHandler):
-    def get(self):
+    def post(self):        
         template_values = {
                    'greetings': ["Hi", "Hello", "Howdy", "DIE IN A FIRE YOU COMMUNIST!"],
                    'url': "http://www.google.com",

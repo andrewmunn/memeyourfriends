@@ -1,0 +1,50 @@
+HTML, BODY {
+    margin:0;
+    padding:0;
+    font-family:"lucida grande,tahoma,verdana,arial,sans-serif";
+}
+
+.clearfix:after {
+        visibility:hidden;
+        display:block;
+        font-size:0;
+        content:" ";
+        clear:both;
+        height:0;
+}
+
+.header {
+    font-size:24px;
+    color:#3B5998;
+}
+
+.step {
+    display:none;
+    width:500px;
+    padding-top:20px;
+}
+
+.step .header {
+    font-size:18px;
+    color:#000;
+    padding-bottom:20px;
+}
+
+.step .content {
+}
+
+#photo_container {
+    float:left;
+    width:200px;
+    height:200px;
+    background-color:#DEDEDE;
+    border:1px solid #4F4F4F;
+}
+
+#caption_entry {
+    float:right;
+}
+
+.caption_box {
+    padding-bottom:10px;
+}

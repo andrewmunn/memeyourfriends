@@ -1,15 +1,49 @@
+<!DOCTYPE HTML PUBLIC
+	  "-//W3C//DTD HTML 4.01 Transitional//EN"
+	  "http://www.w3.org/TR/html4/loose.dtd"
+	  >
 <html>
+  <head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/javascripts/application.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/stylesheets/application.css" />
+  </head>
   <body>
-    {% for greeting in greetings %}
-      <blockquote>{{ greeting|escape }}</blockquote>
-    {% endfor %}
-
-    <form action="/sign" method="post">
-      <div><textarea name="content" rows="3" cols="60"></textarea></div>
-      <div><input type="submit" value="Sign Guestbook"></div>
-    </form>
-
-    <a href="{{ url }}">{{ url_linktext }}</a>
-
+    <div id="fb-root"></div>
+    <div class="header">Make a Meme!</div>
+    <div id="login_step" class="step">
+      <div class="content">
+	<div class="header">Login Using Facebook</div>
+	<fb:login-button
+           length="long"
+           size="large"
+           onlogin="location.reload(true);"
+           perms="friends_photos,friends_photo_video_tags">
+	</fb:login-button>
+      </div>
+    </div>
+    <div id="create_step" class="step">
+      <div class="header">Select a Photo and Caption</div>
+      <div class="content">
+	<form action="/submit">
+	  <div class="clearfix">
+	    <div id="photo_container"></div>
+	    <div id="caption_entry">
+	      <div class="caption_box">
+		Line 1:
+		<input name="caption1" />
+	      </div>
+	      <div class="caption_box">
+		Line 2:
+		<input name="caption2" />
+	      </div>
+	      <div id="submit" class="caption_box">
+		<input type="submit" text="Generate Meme!" />
+	      </div>
+	    </div>
+	  </div>
+	</form>
+      </div>
+    </div>
   </body>
 </html>

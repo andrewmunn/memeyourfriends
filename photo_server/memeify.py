@@ -39,25 +39,35 @@ def drawText(img, text, top):
     font = ImageFont.truetype("impact.ttf", font_size)
     draw = ImageDraw.Draw(img)
 
-    text = wordwrap(text.upper(), font, width)
-    for i, line in enumerate(text):
+    text_array = wordwrap(text.upper(), font, width - width / 20)
+
+    i = .8
+    while len(text_array) * font_size > height / 4:
+        font_size = get_font_size(len(text), width, height, i)
+        text_array = wordwrap(text.upper(), font, width)
+        i -= .1
+        if i < .5:
+            break
+
+    for i, line in enumerate(text_array):
         fw, fh = font.getsize(line)
         x = (width - fw) / 2
-        y = fh * i if top else height - fh * (len(text) - i)
+        y = fh * i if top else height - fh * (len(text_array) - i)
 
-        off = 1 if font < 20 else 2
+        off = fh / 40 + 1
+        print fh
         
         draw.text((x-off, y-off), line, (0,0,0), font=font)
         draw.text((x+off, y-off), line, (0,0,0), font=font)
         draw.text((x-off, y+off), line, (0,0,0), font=font)
         draw.text((x+off, y+off), line, (0,0,0), font=font)
 
-        draw.text((x, y), line, (255,255,255), font=font)
+        draw.text((x, y), line, (255,255,255), font=font)    
 
-def get_font_size(length, width, height):
-    font_size = 2 * int(math.sqrt( (.9 * width * height / 5) / (2 * length)))
-    if font_size > height / 5:
-        font_size = height / 5
+def get_font_size(length, width, height, ratio = .8):
+    font_size = 2 * int(ratio * math.sqrt( (width * height / 5) / (2 * length)))
+    if font_size > height / 6:
+        font_size = height / 6
     return font_size
 
 def wordwrap(s, font, width):
@@ -85,10 +95,8 @@ if __name__ == '__main__':
     import random
 
     urls = [
-        "http://profile.ak.fbcdn.net/hprofile-ak-snc4/hs1322.snc4/161348_1413751666_2615801_n.jpg",
-        "http://t3.gstatic.com/images?q=tbn:ANd9GcTbhbwZ_m0GcUAve6aICiTo7kgvQJjWr0gRogdbLZFNSWghOQUx1A",
-        "http://thechive.files.wordpress.com/2009/06/a-random-hot-chicks-r5-21.jpg?w=500&h=375",
-        "http://www.wired.com/images_blogs/underwire/images/2009/04/09/random_dannyhajek.jpg"
+        "http://www.wired.com/images_blogs/underwire/images/2009/04/09/random_dannyhajek.jpg",
+        "http://sphotos.ak.fbcdn.net/hphotos-ak-snc4/hs1358.snc4/163046_10150380922285181_787795180_16900389_5869434_n.jpg",
         ]
 
     words = ["penis", "love", "I", "the", "cow", "killed", "scary", "huge", "whhhhhhhhhat", "crazy", "WOOT!", "Fravic has man boobs"]

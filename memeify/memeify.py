@@ -21,12 +21,13 @@ def memeify(url, top, bot):
     drawText(img, top, True)
     drawText(img, bot, False)
     
-    output = cStringIO.StringIO()
-    img.save(output, "JPEG")
-        
+    stringio = cStringIO.StringIO()
+    img.save(stringio, "JPEG")
+    output = stringio.getvalue()
+
     data.close()
-    output.close()
-    return output.getvalue()
+    stringio.close()
+    return output
 
 def drawText(img, text, top):
     width, height = img.size
@@ -54,4 +55,9 @@ def drawText(img, text, top):
 if __name__ == '__main__':
     url = "http://profile.ak.fbcdn.net/hprofile-ak-snc4/hs1322.snc4/161348_1413751666_2615801_n.jpg"
 
-    memeify(url, "I LOVE", "CODING")
+    raw = memeify(url, "I LOVE", "CODING")
+
+    data = cStringIO.StringIO(raw)        
+    img = Image.open(data)
+    img.save("meme.jpg")
+

@@ -2,16 +2,17 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 from google.appengine.api.urlfetch import fetch
+from MultipartPostHandler import *
 import facebook as fb
 import os
 import urllib
 import urllib2
 import logging
 import utils
-import StringIO
+import cStringIO as StringIO
 
-APP_KEY = "1c6f5e338c7989f098ad50f8c1224878"
-APP_SECRET = "7d6557c4b9ce6d061b7047041d6538b0"
+APP_KEY = "6d1dda329a51cacc3bee5e0de958bb5d"
+APP_SECRET = "6fe38fe9e6e4767ed570233f183ffa04"
 GRAPH_PHOTO_URL = "https://graph.facebook.com/me/photos"
 MEME_URL = "http://www.willhughes.ca:8080"
 
@@ -39,11 +40,8 @@ class MemeHandler(webapp.RequestHandler):
                                         'top':top,
                                         'bot':bot})
         logging.info(MEME_URL + '?' + meme_params)
-#        meme_data = fetch(MEME_URL + '?' + meme_params)
-#        logging.info(len(meme_data.content))
-
-        request = urllib2.Request(MEME_URL, meme_params)
-        response = urllib2.urlopen(request)
+        meme_data = fetch(MEME_URL + '?' + meme_params)
+        logging.info(len(meme_data.content))
         
         # Post photo and message to user's album
         msg = top + " " + bot
@@ -63,10 +61,16 @@ class MemeHandler(webapp.RequestHandler):
 #                             "multipart/form-data"})
 #        response = urllib2.urlopen(request)
 #
-        out = utils.posturl('https://graph.facebook.com/me/photos', [('access_token', access_token)], [('source', 'upload.jpg', str(response.read()))])
-        logging.info(out)
-        print out
+#        out = utils.posturl('https://graph.facebook.com/me/photos', [('access_token', access_token)], [('source', 'upload.jpg', str(response.read()))])
+#        logging.info(out)
 
+        opener = urllib2.build_opener(MultipartPostHandler)
+        params = {   
+                    "access_token": access_token,
+                     "message": msg,
+                  "source": StringIO.StringIO(meme_data.content, "rb")
+                                   }
+        logging.info(opener.open(GRAPH_PHOTO_URL, params).read())
 
 def main():
     routes = [('/', MainHandler),

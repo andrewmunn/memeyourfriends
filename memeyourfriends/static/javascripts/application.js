@@ -1,7 +1,8 @@
 /* Application Javascript */
 function _Application() {
-    var APP_ID = "1c6f5e338c7989f098ad50f8c1224878";
+    var APP_ID = "6d1dda329a51cacc3bee5e0de958bb5d";
     var MEME_GEN = "http://www.willhughes.ca:8080";
+    var LOCAL_MEME_GEN = "http://web1.tunnlr.com:11580/meme"
 
     function loadFBAPIComplete(response) {
 	if (response.session) {
@@ -55,8 +56,8 @@ function _Application() {
 	top = $("input[name='caption1']").val();
 	bot = $("input[name='caption2']").val();
 	$("#meme_frame").attr("src", MEME_GEN + '?url=' + url + '&top=' + top + '&bot=' + bot);
-	//	$.post(MEME_GEN, {top:top, bot:bot, url:url},
-	//	       submitComplete);
+		$.post(LOCAL_MEME_GEN, {top:top, bot:bot, url:url},
+		       submitComplete);
     }
 
     function submitComplete(response) {

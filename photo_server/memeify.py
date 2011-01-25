@@ -83,12 +83,16 @@ def wordwrap(s, font, width):
         if width_so_far > width:
             if str_width > width:
                 wlen = len(word)
-                wf = word[:wlen/2]
+                wf = word[:wlen/2] + "-"
+                word = word[wlen/2:]
                 if font.getsize(wf)[0] + width_so_far > width:
-                    lines.append(wf)
+                    wf.strip()
+                    if lines[-1] is "":
+                        lines[-1] = wf
+                    else:
+                        lines.append(wf)
                 else:
                     lines[-1] += wf
-                word = word[wlen/2:]
             lines.append("")
             word.strip()
             width_so_far = font.getsize(word)[0]
@@ -107,10 +111,10 @@ if __name__ == '__main__':
         "http://www.21stcenturymed.org/sad-face.jpg",
         ]
 
-    words = ["penis", "dicksdicksdicks", "boy do I love dicks", "love", "I", "the", "cow", "killed", "scary", "huge", "whhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhBOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOBIES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!:DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhat", "crazy", "WOOT!", "Fravichasmanboobs"]
+    words = ["penis", "dicksdicksdicks", "boy do I love dicks", "love", "I", "the", "cow", "killed", "scary", "huge", "whhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhat", "crazy", "WOOT!", "Fravichasmanboobs"]
     
     for count, url in enumerate(urls):
-        word_length = random.randint(1, 6)
+        word_length = random.randint(1, 20)
         top = ""
         for i in range(word_length):
             if i is not 0:
@@ -124,7 +128,6 @@ if __name__ == '__main__':
                 bot += " "
             bot += words[random.randint(0, len(words) - 1)]
 
-        top = "W"
         raw = memeify(url, top, bot)
         data = cStringIO.StringIO(raw)        
         img = Image.open(data)

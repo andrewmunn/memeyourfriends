@@ -6,7 +6,7 @@ from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 
-def memeify(url, top, bot):
+def memeify(url, top, bot, left, upper, right, lower):
     req = Request(url)
 
     try:
@@ -18,58 +18,61 @@ def memeify(url, top, bot):
         print "HTTP Error:",e.code , url
     except URLError, e:
         print "URL Error:",e.reason , url
+    
+    if left and upper and right and lower and int(right) > int(left) and int(upper) < int(lower):
+        box = (int(left),int(upper), int(right), int(lower))
+        img = img.crop(box)
 
     if top: 
         drawText(img, top, True)
     if bot:
         drawText(img, bot, False)
     
-    stringio = cStringIO.StringIO()
-    img.save(stringio, "JPEG")
-    output = stringio.getvalue()
+    save_buffer = cStringIO.StringIO()
+    img.save(save_buffer, "JPEG")
+    output = save_buffer.getvalue()
 
     data.close()
-    stringio.close()
+    save_buffer.close()
     return output
+
 
 def drawText(img, text, top):
     width, height = img.size
-
-    font_size = get_font_size(len(text), width, height)
-    font = ImageFont.truetype("impact.ttf", font_size)
     draw = ImageDraw.Draw(img)
+    font = 0
 
-    text_array = wordwrap(text.upper(), font, width - width / 20)
-
-    i = .8
-    while len(text_array) * font_size > height / 4:
-        font_size = get_font_size(len(text), width, height, i)
-        text_array = wordwrap(text.upper(), font, width)
-        i -= .1
-        if i < .5:
-            break
+    ratio = 0.8
+    while ratio > 0:
+        font_size = get_font_size(len(text), width, height, ratio)
+        font = ImageFont.truetype("impact.ttf", font_size)
+        text_array = wordwrap(text.upper(), font, (19 * width) / 20)
+        
+        if len(text_array) * font_size < height / 5:
+            break;
+        ratio -= 0.05
 
     for i, line in enumerate(text_array):
         fw, fh = font.getsize(line)
         x = (width - fw) / 2
         y = fh * i if top else height - fh * (len(text_array) - i)
 
-        off = fh / 40 + 1
-        print fh
+        border = fh / 40 + 1
         
-        draw.text((x-off, y-off), line, (0,0,0), font=font)
-        draw.text((x+off, y-off), line, (0,0,0), font=font)
-        draw.text((x-off, y+off), line, (0,0,0), font=font)
-        draw.text((x+off, y+off), line, (0,0,0), font=font)
+        draw.text((x-border, y-border), line, (0,0,0), font=font)
+        draw.text((x+border, y-border), line, (0,0,0), font=font)
+        draw.text((x-border, y+border), line, (0,0,0), font=font)
+        draw.text((x+border, y+border), line, (0,0,0), font=font)
 
         draw.text((x, y), line, (255,255,255), font=font)    
 
-def get_font_size(length, width, height, ratio = .8):
+def get_font_size(length, width, height, ratio):
     font_size = 2 * int(ratio * math.sqrt( (width * height / 5) / (2 * length)))
     if font_size > height / 6:
         font_size = height / 6
     return font_size
 
+# TODO: refactor and give better long word splitting
 def wordwrap(s, font, width):
     words = s.split(" ")
     lines = [""]
@@ -83,6 +86,18 @@ def wordwrap(s, font, width):
         width_so_far += str_width
 
         if width_so_far > width:
+            if str_width > width:
+                wlen = len(word)
+                wf = word[:wlen/2] + "-"
+                word = word[wlen/2:]
+                if font.getsize(wf)[0] + width_so_far > width:
+                    wf.strip()
+                    if lines[-1] is "":
+                        lines[-1] = wf
+                    else:
+                        lines.append(wf)
+                else:
+                    lines[-1] += wf
             lines.append("")
             word.strip()
             width_so_far = font.getsize(word)[0]
@@ -97,26 +112,28 @@ if __name__ == '__main__':
     urls = [
         "http://www.wired.com/images_blogs/underwire/images/2009/04/09/random_dannyhajek.jpg",
         "http://sphotos.ak.fbcdn.net/hphotos-ak-snc4/hs1358.snc4/163046_10150380922285181_787795180_16900389_5869434_n.jpg",
+        "http://www.storkie.com/blog/wp-content/uploads/2010/09/angry-baby-fist.jpg",
+        "http://www.21stcenturymed.org/sad-face.jpg",
         ]
 
-    words = ["penis", "love", "I", "the", "cow", "killed", "scary", "huge", "whhhhhhhhhat", "crazy", "WOOT!", "Fravic has man boobs"]
+    words = ["penis", "dicksdicksdicks", "boy do I love dicks", "love", "I", "the", "cow", "killed", "scary", "huge", "whhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhat", "crazy", "WOOT!", "Fravichasmanboobs"]
     
     for count, url in enumerate(urls):
-        word_length = random.randint(1, 10)
+        word_length = random.randint(1, 20)
         top = ""
         for i in range(word_length):
             if i is not 0:
                 top += " "
             top += words[random.randint(0, len(words) - 1)]
 
-        word_length = random.randint(1, 10)
+        word_length = random.randint(1, 20)
         bot = ""
         for i in range(word_length):
             if i is not 0:
                 bot += " "
             bot += words[random.randint(0, len(words) - 1)]
-            
-        raw = memeify(url, top, bot)
+
+        raw = memeify(url, top, bot, 100, 100, 700, 700)
         data = cStringIO.StringIO(raw)        
         img = Image.open(data)
         img.save("meme1" + str(count) + ".jpg")

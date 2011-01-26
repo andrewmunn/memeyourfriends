@@ -20,7 +20,7 @@ def memeify(url, top, bot, left, upper, right, lower):
         print "URL Error:",e.reason , url
     
     if left and upper and right and lower:
-        box = (left, upper, right, lower)
+        box = (int(left),int(upper), int(right), int(lower))
         img = img.crop(box)
 
     if top: 

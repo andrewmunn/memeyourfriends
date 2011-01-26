@@ -19,7 +19,7 @@ def memeify(url, top, bot, left, upper, right, lower):
     except URLError, e:
         print "URL Error:",e.reason , url
     
-    if left and upper and right and lower:
+    if left and upper and right and lower and int(right) > int(left) and int(upper) < int(lower):
         box = (int(left),int(upper), int(right), int(lower))
         img = img.crop(box)
 

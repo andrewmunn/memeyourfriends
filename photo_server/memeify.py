@@ -6,7 +6,7 @@ from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 
-def memeify(url, top, bot):
+def memeify(url, top, bot, left, upper, right, lower):
     req = Request(url)
 
     try:
@@ -18,6 +18,10 @@ def memeify(url, top, bot):
         print "HTTP Error:",e.code , url
     except URLError, e:
         print "URL Error:",e.reason , url
+    
+    if left and upper and right and lower:
+        box = (left, upper, right, lower)
+        img = img.crop(box)
 
     if top: 
         drawText(img, top, True)
@@ -31,6 +35,7 @@ def memeify(url, top, bot):
     data.close()
     save_buffer.close()
     return output
+
 
 def drawText(img, text, top):
     width, height = img.size
@@ -128,7 +133,7 @@ if __name__ == '__main__':
                 bot += " "
             bot += words[random.randint(0, len(words) - 1)]
 
-        raw = memeify(url, top, bot)
+        raw = memeify2(url, top, bot, 100, 100, 700, 700)
         data = cStringIO.StringIO(raw)        
         img = Image.open(data)
         img.save("meme1" + str(count) + ".jpg")

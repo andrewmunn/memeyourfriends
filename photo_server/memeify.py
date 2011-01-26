@@ -133,7 +133,7 @@ if __name__ == '__main__':
                 bot += " "
             bot += words[random.randint(0, len(words) - 1)]
 
-        raw = memeify2(url, top, bot, 100, 100, 700, 700)
+        raw = memeify(url, top, bot, 100, 100, 700, 700)
         data = cStringIO.StringIO(raw)        
         img = Image.open(data)
         img.save("meme1" + str(count) + ".jpg")

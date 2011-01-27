@@ -10,7 +10,7 @@ import urllib
 import urllib2
 import logging
 import utils
-import cStringIO as StringIO
+import StringIO
 import settings
 APP_KEY = settings.app_key
 APP_SECRET = settings.secret_key
@@ -45,33 +45,19 @@ class MemeHandler(webapp.RequestHandler):
         
         if (len(meme_data.content) < 100):
             logging.info(meme_data.content)
-        
+        logging.info("version 4 baby!")
         # Post photo and message to user's album
         msg = top + " " + bot
-#        post_data = {   
-#            "access_token": access_token,
-#            "message": msg,
-#            "source": meme_data.content
-#            }
-        logging.info(access_token)
-#        response = fetch(GRAPH_PHOTO_URL,
-#              payload = post_data,
-#              method = "POST",
-#              headers = {"Content-Type":
-#                             "multipart/form-data"})
-#        request = urllib2.Request(GRAPH_PHOTO_URL, urllib.urlencode(post_data),
-#                                   {"Content-Type":
-#                             "multipart/form-data"})
-#        response = urllib2.urlopen(request)
-#
-#        out = utils.posturl('https://graph.facebook.com/me/photos', [('access_token', access_token)], [('source', 'upload.jpg', str(response.read()))])
-#        logging.info(out)
 
+        logging.info(access_token)
+
+        imgData = StringIO.StringIO(meme_data.content)
+        imgData.name = "image.jpg"
         register_openers()
         params = {   
                     "access_token": access_token,
                      "message": msg,
-                  "source": StringIO.StringIO(meme_data.content)
+                  "source": imgData
                 }
                 
         datagen, headers = multipart_encode(params)
